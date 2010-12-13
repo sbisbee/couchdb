@@ -279,7 +279,8 @@ specific language governing permissions and limitations under the License.
     });
     
     $("span#raw-link").click(function () {
-      window.location = window.location.hash.replace('#','');
+      var redir = window.location.hash.replace('#','');
+      window.location = (redir == '' || redir == '/') ? '/_all_dbs' : redir;
     })
   })()
   
