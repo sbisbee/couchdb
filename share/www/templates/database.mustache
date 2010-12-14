@@ -15,34 +15,14 @@ specific language governing permissions and limitations under the License.
 <div id="switch">
   <a href="#/{{db}}/_views" class="to-views">Views ></a>
 </div>
-<div id="jumpto">
-  <label>Jump to:
-    <input type="text"  id="jumptodoc" name="docid" placeholder="Document ID" autocomplete="off" />
-  </label>
-</div>
 <ul id="toolbar">
   <li><button class="add">New Document</button></li>
   <!-- <li><button class="security">Security…</button></li> -->
   
 </ul>
-
-<div id="dbinfo">
-  <div class="info-title">Documents </div><div class="info-value" id="doc_count"></div>
-  <div class="info-title">Deleted </div><div class="info-value" id="doc_del_count"></div>
-  <div class="info-title">Sequence </div><div class="info-value" id="update_seq"></div>
-  <div class="info-title">Purge Seq </div><div class="info-value" id="purge_seq"></div>
-  <div class="info-title">Compacting </div><div class="info-value" id="compact_running"></div>
-  <br>
-  <div class="info-title">Document Store Size </div><div class="info-value" id="disk_size"></div>
-  <div class="info-title">View Index Size </div><div class="info-value" id="views_size"></div>
-  <div class="info-title">Full Database Size </div><div class="info-value" id="full_size"></div>
-  <div id="changes">
-    <a href="#/{{db}}/_changes" class="to-views">Changes ></a>
-  </div>
-  <br>
+<div id="changes">
+  <a href="#/{{db}}/_changes" class="to-views">Changes ></a>
 </div>
-
-
 
 <table id="documents" class="listing" cellspacing="0">
   <caption>Documents</caption>
@@ -62,6 +42,11 @@ specific language governing permissions and limitations under the License.
           <option value="ddocs">Design Documents</option>
           <option value="query">Query</option>
         </select>
+        <div id="jumpto">
+          <label>Jump to:
+            <input type="text"  id="jumptodoc" name="docid" placeholder="Document ID" autocomplete="off" />
+          </label>
+        </div>
       </td>
     </tr>
   </tbody>
@@ -70,6 +55,18 @@ specific language governing permissions and limitations under the License.
   <li><button class="delete">Delete Database</button></li>
   <li><button class="compact">Compact &amp; Cleanup</button></li>
 </ul>
+
+<div id="dbinfo">
+  <div class="info-title">Documents </div><div class="info-value" id="doc_count"></div>
+  <div class="info-title">Deleted </div><div class="info-value" id="doc_del_count"></div>
+  <div class="info-title">Sequence </div><div class="info-value" id="update_seq"></div>
+  <div class="info-title">Purge Seq </div><div class="info-value" id="purge_seq"></div>
+  <div class="info-title">Compacting </div><div class="info-value" id="compact_running"></div>
+  <br />
+  <div class="info-title">Document Store Size </div><div class="info-value" id="disk_size"></div>
+  <div class="info-title">View Index Size </div><div class="info-value" id="views_size"></div>
+  <div class="info-title">Full Database Size </div><div class="info-value" id="full_size"></div>
+</div>
 <script>
   $.futonUpdateRecentDatabases("{{db}}");
 </script>

@@ -586,9 +586,9 @@ app.showDatabase = function () {
     request({url: '/'+encodeURIComponent(db)}, function (err, info) {
       if (err) handleError(err, info);
       // Fill out all info from the db query.
-      for (i in info) {$('div#'+i).text(info[i])}
+      for (i in info) {$('#'+i).text(info[i])}
       var disk_size = info.disk_size;
-      $('div#disk_size').text(formatSize(info.disk_size))
+      $('#disk_size').text(formatSize(info.disk_size))
       
       // Query for ddocs to calculate size
       request({url:'/'+encodeURIComponent(db)+'/_all_docs?startkey="_design/"&endkey="_design0"'}, function (err, docs) {
@@ -603,15 +603,15 @@ app.showDatabase = function () {
             if (sizes.length === docs.rows.length) {
               // All queries are finished, update size info
               var s = sum(sizes)
-              $('div#views_size').text(formatSize(s));
-              $('div#full_size').text(formatSize(s + disk_size));
+              $('#views_size').text(formatSize(s));
+              $('#full_size').text(formatSize(s + disk_size));
             }
           })
         }
         if (docs.rows.length === 0) {
           // There are no design documents, db size is full size
-          $('div#views_size').text(formatSize(0));
-          $('div#full_size').text(formatSize(disk_size));
+          $('#views_size').text(formatSize(0));
+          $('#full_size').text(formatSize(disk_size));
         }
       })
     })
@@ -679,7 +679,7 @@ app.showDatabase = function () {
   }
   
   // Decide whether or not to load the template content
-  if ( $('div#dbinfo').length === 0) {    
+  if ( $('#dbinfo').length === 0) {
     this.render('templates/database.mustache', {db:db})
       .replace('#content')
       .then(function () {init(); moreRows(0,20);})

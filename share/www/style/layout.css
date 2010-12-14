@@ -329,10 +329,10 @@ body.loading #dialog h2 {
 
 /* Document quick jump */
 
-#jumpto { float: right; padding: 5px 10px 5px 5px; line-height: 16px;
-  font-weight: bold; color: #666; font-size: 90%; }
+#jumpto { float: right; padding: 0 5px; line-height: 16px;
+  font-weight: bold; color: #666; }
 
-#jumpto input { font-size: 90%; }
+#jumpto input { padding:2px }
 
 /* View selector */
 
@@ -415,7 +415,7 @@ body.loading #dialog h2 {
   text-align: right;
 }
 
-div#dbinfo {margin-bottom:8px;}
+div#dbinfo {margin-bottom:8px;text-align:center}
 .dbquery-select {float:right;}
 #pagination {float:left;}
 #pages-input {width:18px;}
@@ -424,8 +424,8 @@ span.to-views { color: #FF0000; font-weight: bold;
 }
 span.query-option { float:right; margin-left:8px;}
 input.query-option { float:right; margin-left:5px; width:70px;}
-div.info-title { float:left; color: #666; margin-right:8px; }
-div.info-value { float:left; margin-right:30px; }
+div.info-title { display:inline; color: #666; margin-right:8px; }
+div.info-value { display:inline; margin-right:30px; }
 
 /* Changes table */
 
