@@ -83,6 +83,7 @@ specific language governing permissions and limitations under the License.
   <script src="script/sha1.js"></script>
   <script src="script/sammy/sammy.js"></script>
   <script src="script/sammy/plugins/sammy.mustache.js"></script>
+  <script src="script/sammy/plugins/sammy.title.js"></script>
   <script src="script/futon.js"></script>
   
   <script>
@@ -91,7 +92,10 @@ specific language governing permissions and limitations under the License.
   
   (function () {
     // Start Sammy app
-    futonApp.use('Mustache'); 
+    futonApp.use('Mustache');
+    futonApp.use('Title');
+    futonApp.setTitle('CouchDB: ');
+
     futonApp.run();
     
     var store = window.localStorage;

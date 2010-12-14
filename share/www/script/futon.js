@@ -161,6 +161,7 @@ $.expr[":"].exactly = function(obj, index, meta, stack){
 }
 
 app.showIndex = function () {
+  this.title('Overview');
   var t = this
     , a = arguments
     ;
@@ -170,6 +171,7 @@ app.showIndex = function () {
 }
 
 app.showDocument = function () {
+  this.title('/'+this.params['db']+'/'+this.params['docid']);
   var t = this
     , a = arguments
     ;
@@ -183,6 +185,9 @@ app.showChanges = function () {
     , t = this
     , a = arguments
     ;
+
+  this.title('/'+db+'/_changes');
+
   $('span#topbar').html('<a href="#/">Overview</a><a href="#/'+encodeURIComponent(db)+'">'+db+'</a><strong>_changes</strong>');  
   this.render('templates/changes.mustache').replace('#content').then(function () {
     app.loadChanges.apply(t, a)
@@ -190,6 +195,7 @@ app.showChanges = function () {
 }
 
 app.showConfig = function () {
+  this.title('Configuration');
   $('span#topbar').html('<strong>Configuration</strong>');
   this.render('templates/config.mustache').replace('#content').then(function () {
     
@@ -197,6 +203,7 @@ app.showConfig = function () {
 }
 
 app.showStats = function () {
+  this.title('Status');
   $('span#topbar').html('<strong>Status</strong>');
   this.render('templates/stats.mustache').replace('#content').then(function () {
     
@@ -204,12 +211,14 @@ app.showStats = function () {
 }
 
 app.showTests = function () {
+  this.title('Test Suite');
   $('span#topbar').html('<strong>Test Suite</strong>');
   this.render('templates/tests.mustache').replace('#content').then(function () {
     
   })
 }
 app.showReplicator = function () {
+  this.title('Replicator');
   $('span#topbar').html('<strong>Replicator</strong>');
   this.render('templates/replicator.mustache').replace('#content').then(function () {
     
@@ -224,7 +233,9 @@ app.showView = function () {
     , _this = this
     , _args = arguments
     ;
-  
+
+  this.title('/'+db+'/_design'+(ddoc ? '/'+ddoc+(view ? '/_view/'+view : '') : ''));
+
   var refresh = function () {
     var h = '#/' + encodeURIComponent(db) + '/_design/' + ddoc + '/_view/' + view
       , query = {}
@@ -524,7 +535,9 @@ app.showDatabase = function () {
   var db = this.params['db']
     , query = getQuery()
     ;
-  
+
+  this.title('/'+db);
+
   var init = function () {
     $('span#topbar').html('<a href="#/">Overview</a><strong>'+db+'</strong>');
     $("#toolbar button.add").click( function () { 
