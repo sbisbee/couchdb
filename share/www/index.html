@@ -23,7 +23,7 @@ specific language governing permissions and limitations under the License.
   </head>
   <body>
     <div id="wrap">
-      <h1 id="topbar">
+      <h1>
         <span id="topbar">&#160;</span>
         <span id="raw-link" >&#160;</span>
       </h1>
@@ -79,23 +79,23 @@ specific language governing permissions and limitations under the License.
   <script src="script/jquery.couch.js"></script>
   <script src="script/futon-dialogs.js"></script>
   
-  <script src="script/json2.js"></script>
   <script src="script/sha1.js"></script>
   <script src="script/sammy/sammy.js"></script>
   <script src="script/sammy/plugins/sammy.mustache.js"></script>
   <script src="script/sammy/plugins/sammy.title.js"></script>
+  <script src="script/sammy/plugins/sammy.json.js"></script>
+  <script src="script/sammy/plugins/sammy.storage.js"></script>
   <script src="script/futon.js"></script>
   
+  <!-- snippets -->
+  <script type="text/html" id="mustachio"><ul id="all-dbs">{{#dbs}}<li{{#current}} class="current"{{/current}}><a href="#/{{.}}">{{.}}</a></li>{{/dbs}}</ul></script>
+
   <script>
   
   // Recent databases
   
   (function () {
     // Start Sammy app
-    futonApp.use('Mustache');
-    futonApp.use('Title');
-    futonApp.setTitle('CouchDB: ');
-
     futonApp.run();
     
     var store = window.localStorage;

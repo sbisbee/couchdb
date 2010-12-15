@@ -74,7 +74,8 @@ app.loadIndex = function () {
   }
 
   request({url: '/_all_dbs'}, function (err, dbs) {
-    if (err) handleError(err, dbs)    
+    if (err) handleError(err, dbs);
+    futonApp.cache('dbs', dbs);
     var moreRows = function (start, limit) {
       for (var i=start;i<(start + limit);i+=1) { 
          if (dbs[i]) dbRow(dbs[i], isEven(i));

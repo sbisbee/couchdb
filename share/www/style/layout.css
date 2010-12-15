@@ -80,6 +80,33 @@ fieldset p { margin: .4em; }
 
 p.help { color: #999; font-size: 90%; margin: 0 2em 1em; }
 
+/* Topbar */
+#topbar button { background: transparent 2px 2px no-repeat; border: none;
+  color: #666; margin: 0; padding: 2px 0em 2px 22px; cursor: pointer;
+  font-size: 95%; line-height: 16px;
+}
+#topbar button:hover { background-position: 2px -30px; color: #000; }
+#topbar button:active { background-position: 2px -62px; color: #000; }
+#topbar button.down { background-image: url(../image/down.png); }
+
+#topbar #current-db { position:relative}
+#topbar ul#all-dbs { display: none; background: white; position: absolute;
+  width: 150px; left: 0; top: 30px; z-index: 100;
+  -moz-box-shadow: 0 1px 5px #333; -moz-border-radius: 5px;
+  border: 1px solid #ccc; color: black;
+  font-size: 80%; line-height: 1.5em; list-style: none; margin:0; padding:0.5em 1em;
+}
+#topbar strong ul#all-dbs li :link, #topbar strong ul#all-dbs li :visited {
+  color:black !important;text-shadow:none;
+}
+#topbar strong ul#all-dbs li.current :link, #topbar strong ul#all-dbs li.current :visited {
+  color:#BA1E16 !important;
+}
+
+#topbar ul.tabs { float:right;margin-right:150px;margin-top:4px}
+#topbar ul.tabs li { display:inline;padding:2px 8px;margin-right:5px}
+#topbar ul.tabs li.current { background:white}
+
 /* Tabular listings */
 
 table.listing { border-collapse: separate; border-spacing: 0;

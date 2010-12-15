@@ -531,15 +531,21 @@ app.showView = function () {
   } else {setupViews();}
 }
 
-app.showDatabase = function () {
+app.showDatabase = function (context) {
   var db = this.params['db']
     , query = getQuery()
     ;
 
   this.title('/'+db);
 
-  var init = function () {
-    $('span#topbar').html('<a href="#/">Overview</a><strong>'+db+'</strong>');
+  var init = function (context) {
+    $('span#topbar').html('<a href="#/">Overview</a><strong id="current-db">'
+        + db +' <button class="down">&#160;</button></strong>');
+    context.render($('#mustachio'), {dbs:context.cache('dbs'), current: function () { return this['.'] == db; }})
+      .appendTo('#current-db');
+    $("#topbar button.down").click(function () {
+      $('#all-dbs').slideToggle();
+    });
     $("#toolbar button.add").click( function () { 
       $("div#content").html('');
       request({url:'/_uuids'}, function (err, resp) {
@@ -677,19 +683,10 @@ app.showDatabase = function () {
      $('span.more').click(function ( ) { moreRows(start + limit, parseInt($('#pages-input').val())) });
    })
   }
-  
-  // Decide whether or not to load the template content
-  if ( $('#dbinfo').length === 0) {
-    this.render('templates/database.mustache', {db:db})
-      .replace('#content')
-      .then(function () {init(); moreRows(0,20);})
-      
-  } else {
-    // If the template content is already there, remove the current content
-    $('tr.even').remove();
-    $('tr.odd').remove();
-    moreRows(0, 20);
-  }
+
+  this.render('templates/database.mustache', {db:db})
+    .replace('#content')
+    .then(function () {init.call(this, context); moreRows(0,20);});
 }
 
 app.wildcard = function () {
@@ -701,6 +698,14 @@ app.wildcard = function () {
 }
 
 var futonApp = $.sammy(function () {
+  this.use('Mustache');
+  this.use('Title');
+  this.use('Cache');
+
+  this.template_engine = 'mustache';
+
+  this.setTitle('CouchDB: ');
+
   // Index of all databases
   this.get('', app.showIndex);
   this.get("#/", app.showIndex);
