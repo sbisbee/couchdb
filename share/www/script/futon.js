@@ -45,7 +45,7 @@ var getQuery = function () {
   var r = {}
   for (var i=0;i<s.length;i+=1) {
     var x = s[i];
-    r[x.slice(0, x.indexOf('='))] = unescape(x.slice(x.indexOf('=')+1));
+    r[x.slice(0, x.indexOf('='))] = decodeURIComponent(x.slice(x.indexOf('=')+1));
   }
   return r;
 }
@@ -541,7 +541,11 @@ app.showDatabase = function (context) {
   var init = function (context) {
     $('span#topbar').html('<a href="#/">Overview</a><strong id="current-db">'
         + db +' <button class="down">&#160;</button></strong>');
-    context.render($('#mustachio'), {dbs:context.cache('dbs'), current: function () { return this['.'] == db; }})
+    var dbs = [];
+    $(context.cache('dbs')).each(function (i, el) {
+      dbs.push({'db':el, 'url':encodeURIComponent(el)});
+    });
+    context.render($('#mustachio'), {dbs:dbs, current: function () { return this.db == db; }})
       .appendTo('#current-db');
     $("#topbar button.down").click(function () {
       $('#all-dbs').slideToggle();

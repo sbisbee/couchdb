@@ -97,7 +97,7 @@ p.help { color: #999; font-size: 90%; margin: 0 2em 1em; }
   font-size: 80%; line-height: 1.5em; list-style: none; margin:0; padding:0.5em 1em;
 }
 #topbar strong ul#all-dbs li :link, #topbar strong ul#all-dbs li :visited {
-  color:black !important;text-shadow:none;
+  color:black !important;text-shadow:none;white-space:nowrap;
 }
 #topbar strong ul#all-dbs li.current :link, #topbar strong ul#all-dbs li.current :visited {
   color:#BA1E16 !important;
