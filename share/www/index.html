@@ -87,35 +87,12 @@ specific language governing permissions and limitations under the License.
   <script src="script/futon.js"></script>
   
   <!-- snippets -->
-  <script type="text/html" id="mustachio"><ul id="all-dbs">{{#dbs}}<li{{#current}} class="current"{{/current}}><a href="#/{{url}}">{{db}}</a></li>{{/dbs}}</ul></script>
+  <script type="text/html" id="template_all_dbs"><ul id="all-dbs">{{#dbs}}<li{{#current}} class="current"{{/current}}><a href="#/{{url}}">{{db}}</a></li>{{/dbs}}</ul></script>
 
   <script>
-  
-  // Recent databases
-  
-  (function () {
+  (function($) {
     // Start Sammy app
     futonApp.run();
-    
-    var store = window.localStorage;
-    if (!store) var recents = []
-    else {
-      var recents = JSON.parse(store.getItem("recentDatabases")) || []
-    }
-    $.futonUpdateRecentDatabases = function (dbname) {
-      if (dbname) {
-        if (recents.indexOf(dbname) !== -1) recents.splice(recents.indexOf(dbname), 1)
-        recents.push(dbname)
-      }
-      var c = $("ul#dbs");
-      c.html('')
-      for (var i=recents.length;i>0;i-=1) {
-        c.append('<li><a href="#/'+encodeURIComponent(recents[i - 1])+'" title="'+recents[i - 1]+'">'+recents[i - 1]+'</a></li>')
-      }
-      while(recents.length > 10) recents.shift(); 
-      store.setItem("recentDatabases", JSON.stringify(recents))
-    }
-    $.futonUpdateRecentDatabases()
 
     // Sidebar toggling
 
@@ -360,7 +337,7 @@ specific language governing permissions and limitations under the License.
       var redir = window.location.hash.replace('#','');
       window.location = (redir == '' || redir == '/') ? '/_all_dbs' : redir;
     })
-  })()
+  })(jQuery);
   
   </script>
   

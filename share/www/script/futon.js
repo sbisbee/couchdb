@@ -545,7 +545,7 @@ app.showDatabase = function (context) {
     $(context.cache('dbs')).each(function (i, el) {
       dbs.push({'db':el, 'url':encodeURIComponent(el)});
     });
-    context.render($('#mustachio'), {dbs:dbs, current: function () { return this.db == db; }})
+    context.render($('#template_all_dbs'), {dbs:dbs, current: function () { return this.db == db; }})
       .appendTo('#current-db');
     $("#topbar button.down").click(function () {
       $('#all-dbs').slideToggle();
@@ -594,6 +594,8 @@ app.showDatabase = function (context) {
     }
 
     request({url: '/'+encodeURIComponent(db)}, function (err, info) {
+      context.futonUpdateRecentDatabases(db);
+
       if (err) handleError(err, info);
       // Fill out all info from the db query.
       for (i in info) {$('#'+i).text(info[i])}
@@ -709,6 +711,30 @@ var futonApp = $.sammy(function () {
   this.template_engine = 'mustache';
 
   this.setTitle('CouchDB: ');
+
+  // Recent databases
+  var recents = this.cache('recentDatabases') || [];
+
+  this.helpers({
+    futonUpdateRecentDatabases: function (dbname) {
+      if (dbname) {
+        if (recents.indexOf(dbname) !== -1) recents.splice(recents.indexOf(dbname), 1)
+        recents.push(dbname)
+      }
+
+      var c = $("ul#dbs");
+      c.html('')
+      for (var i=recents.length;i>0;i-=1) {
+        c.append('<li><a href="#/'+encodeURIComponent(recents[i - 1])+'" title="'+recents[i - 1]+'">'+recents[i - 1]+'</a></li>')
+      }
+      while(recents.length > 10) recents.shift();
+      this.cache("recentDatabases", JSON.stringify(recents))
+    }
+  });
+
+  this.bind('run', function() {
+    this.futonUpdateRecentDatabases();
+  });
 
   // Index of all databases
   this.get('', app.showIndex);
