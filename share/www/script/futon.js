@@ -188,7 +188,7 @@ app.showChanges = function () {
 
   this.title('/'+db+'/_changes');
 
-  $('span#topbar').html('<a href="#/">Overview</a><a href="#/'+encodeURIComponent(db)+'">'+db+'</a><strong>_changes</strong>');  
+  $('span#topbar').html('<a href="#/">Overview</a><a href="#/'+encodeURIComponent(db)+'/_all_docs">'+db+'</a><strong>_changes</strong>');
   this.render('templates/changes.mustache').replace('#content').then(function () {
     app.loadChanges.apply(t, a)
   })
@@ -525,7 +525,7 @@ app.showView = function () {
     
   }
   
-  $('span#topbar').html('<a href="#/">Overview</a><a href="#/'+encodeURIComponent(db)+'">'+db+'</a><strong>_view</strong>');
+  $('span#topbar').html('<a href="#/">Overview</a><a href="#/'+encodeURIComponent(db)+'/_all_docs">'+db+'</a><strong>_view</strong>');
   if ($('div#query-options').length === 0) {
     this.render('templates/view.mustache').replace('#content').then(setupViews);
   } else {setupViews();}
@@ -539,13 +539,26 @@ app.showDatabase = function (context) {
   this.title('/'+db);
 
   var init = function (context) {
-    $('span#topbar').html('<a href="#/">Overview</a><strong id="current-db">'
-        + db +' <button class="down">&#160;</button></strong>');
+    $('#topbar').html('<a href="#/">Overview</a><strong id="current-db">'
+        + db +' <button class="down">&#160;</button></strong>'
+        + '<ul class="tabs"><li class="all-docs"><a href="#/' + encodeURIComponent(db) + '/_all_docs">All Documents</a></li>'
+        + '<li class="design-docs"><a href="#/' + encodeURIComponent(db) + '/_all_docs?startkey=%22_design/%22&endkey=%22_design0%22">Design Docs</a></li>'
+        + '<li class="changes"><a href="#/' + encodeURIComponent(db) + '/_changes">Changes</a></li></ul>');
+
+    // check for design doc list first, then _all_docs, then _changes
+    if (location.hash.search(/_all_docs\?startkey\=(\%22_design\/\%22|\"_design\/\")/g) > -1) {
+      $('#topbar .tabs .design-docs').addClass('current');
+    } else if (location.hash.search(/_all_docs/g) > -1) {
+      $('#topbar .tabs .all-docs').addClass('current');
+    } else if (location.hash.search(/_changes/g) > -1) {
+      $('#topbar .tabs .changes').addClass('current');
+    }
+
     var dbs = [];
     $(context.cache('dbs')).each(function (i, el) {
       dbs.push({'db':el, 'url':encodeURIComponent(el)});
     });
-    context.render($('#template_all_dbs'), {dbs:dbs, current: function () { return this.db == db; }})
+    context.render($('#all-dbs-template'), {dbs:dbs, current: function () { return this.db == db; }})
       .appendTo('#current-db');
     $("#topbar button.down").click(function () {
       $('#all-dbs').slideToggle();
@@ -690,7 +703,7 @@ app.showDatabase = function (context) {
    })
   }
 
-  this.render('templates/database.mustache', {db:db})
+  this.render('templates/database.mustache', {db:encodeURIComponent(db)})
     .replace('#content')
     .then(function () {init.call(this, context); moreRows(0,20);});
 }
@@ -745,19 +758,19 @@ var futonApp = $.sammy(function () {
   this.get('#/_tests', app.showTests);
   this.get('#/_replicate', app.showReplicator)
   
-  this.get('#/:db/_views', app.showView);
+  this.get('#/:db/_views', app.showView); // TODO: see below...duplicate route?
   this.get('#/:db/_design/:ddoc/_view/', app.showView);
   this.get('#/:db/_design/:ddoc/_view/:view', app.showView);
   
   
   // Database view
-  this.get('#/:db', app.showDatabase);
+  this.get('#/:db', app.showDatabase); // TODO: redirect to _all_docs
   this.get('#/:db/_all_docs', app.showDatabase);
   // Database _changes feed
   this.get('#/:db/_changes', app.showChanges);
   
   // Database views viewer
-  this.get('#/:db/_views', app.showViews);
+  this.get('#/:db/_views', app.showViews); // TODO: not a real CouchDB URL...replace?
   // Document editor/viewer
   this.get('#/:db/:docid', app.showDocument);
   

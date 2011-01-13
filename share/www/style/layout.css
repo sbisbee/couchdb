@@ -30,7 +30,7 @@ span.more { text-align: center; color: #ba1e16; cursor:pointer;}
 h1 { background: #333; border-right: 2px solid #111;
   border-bottom: 1px solid #333; color: #999;
   font: normal 125% Verdana, sans-serif; height: 32px;
-  line-height: 32px; margin: 0; padding: 0 0 0 .5em; position: relative;
+  line-height: 2.2em; margin: 0; padding: 0 0 0 .5em; position: relative;
 }
 h1 :link, h1 :visited, h1 strong { padding: .4em .5em; }
 h1 :link, h1 :visited {
@@ -106,9 +106,13 @@ p.help { color: #999; font-size: 90%; margin: 0 2em 1em; }
 }
 #topbar strong ul#all-dbs li a:hover { background:#E9E9E9 !important; }
 
-#topbar ul.tabs { float:right;margin-right:150px;margin-top:4px}
-#topbar ul.tabs li { display:inline;padding:2px 8px;margin-right:5px}
+#topbar ul.tabs { float:right;margin-right:65px;margin-top:4px;
+  text-transform:lowercase;font-size:80%;
+}
+#topbar ul.tabs li { float:left;list-style:none;margin-right:8px}
 #topbar ul.tabs li.current { background:white}
+#topbar ul.tabs li a { background:none;padding:0 8px;text-shadow:none;display:block;float:left}
+#topbar ul.tabs li.current a {color:black}
 
 /* Tabular listings */
 
@@ -681,7 +685,7 @@ form#replicator p.actions { padding: 1px; clear: left; margin: 0;
 
 div.stat-section {font-weight:bold; font-size:18px;}
 div.stat-subsection {font-weight:bold; font-size:14px; padding-bottom:1px; padding-top:3px;}
-span.stat-title {font-weight:bold; font-size:12px; float:left; color: #FF0000;}
+span.stat-title {font-weight:bold; font-size:12px; float:left; color: #ACACAC;}
 span.stat-value {font-size:12px; float:left; padding-left:5px; padding-right:20px;}
 span.stat-subsection-description {font-size:12px; font-weight:normal; padding-left:8px;}
 
