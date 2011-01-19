@@ -181,18 +181,31 @@ app.showDocument = function () {
 }
 
 app.showChanges = function () {
-  var db = this.params['db']
-    , t = this
-    , a = arguments
-    ;
+  var db = this.params['db'],
+      _this = this,
+      a = arguments,
+      query = getQuery(),
+      url = '/'+encodeURIComponent(db)+'/_changes';
+
+  if (query) {
+    url += ('?' + param(query));
+  }
 
   this.title('/'+db+'/_changes');
+  this.addDBTopBar(db);
+  this.setCurrentTab();
 
-  $('span#topbar').html('<a href="#/">Overview</a><a href="#/'+encodeURIComponent(db)+'/_all_docs">'+db+'</a><strong>_changes</strong>');
-  this.render('templates/changes.mustache').replace('#content').then(function () {
-    app.loadChanges.apply(t, a)
-  })
-}
+  this.load(url).then(function(content) {
+    if (typeof content != 'object') {
+      content = JSON.parse(content);
+    }
+    $(content.results).each(function(idx, el) {
+      el.baseUrl = '#/'+db+'/';
+      el.prior_seq = el.seq-1;
+    });
+    this.render('templates/changes.mustache', content).replace('#content');
+  });
+};
 
 app.showConfig = function () {
   this.title('Configuration');
@@ -539,20 +552,8 @@ app.showDatabase = function (context) {
   this.title('/'+db);
 
   var init = function (context) {
-    $('#topbar').html('<a href="#/">Overview</a><strong id="current-db">'
-        + db +' <button class="down">&#160;</button></strong>'
-        + '<ul class="tabs"><li class="all-docs"><a href="#/' + encodeURIComponent(db) + '/_all_docs">All Documents</a></li>'
-        + '<li class="design-docs"><a href="#/' + encodeURIComponent(db) + '/_all_docs?startkey=%22_design/%22&endkey=%22_design0%22">Design Docs</a></li>'
-        + '<li class="changes"><a href="#/' + encodeURIComponent(db) + '/_changes">Changes</a></li></ul>');
-
-    // check for design doc list first, then _all_docs, then _changes
-    if (location.hash.search(/_all_docs\?startkey\=(\%22_design\/\%22|\"_design\/\")/g) > -1) {
-      $('#topbar .tabs .design-docs').addClass('current');
-    } else if (location.hash.search(/_all_docs/g) > -1) {
-      $('#topbar .tabs .all-docs').addClass('current');
-    } else if (location.hash.search(/_changes/g) > -1) {
-      $('#topbar .tabs .changes').addClass('current');
-    }
+    context.addDBTopBar(db);
+    context.setCurrentTab();
 
     var dbs = [];
     $(context.cache('dbs')).each(function (i, el) {
@@ -742,6 +743,23 @@ var futonApp = $.sammy(function () {
       }
       while(recents.length > 10) recents.shift();
       this.cache("recentDatabases", JSON.stringify(recents))
+    },
+    addDBTopBar: function(db) {
+      $('#topbar').html('<a href="#/">Overview</a><strong id="current-db">'
+          + db +' <button class="down">&#160;</button></strong>'
+          + '<ul class="tabs"><li class="all-docs"><a href="#/' + encodeURIComponent(db) + '/_all_docs">All Documents</a></li>'
+          + '<li class="design-docs"><a href="#/' + encodeURIComponent(db) + '/_all_docs?startkey=%22_design/%22&endkey=%22_design0%22">Design Docs</a></li>'
+          + '<li class="changes"><a href="#/' + encodeURIComponent(db) + '/_changes">Changes</a></li></ul>');
+    },
+    setCurrentTab: function() {
+      // check for design doc list first, then _all_docs, then _changes
+      if (location.hash.search(/_all_docs\?startkey\=(\%22_design\/\%22|\"_design\/\")/g) > -1) {
+        $('#topbar .tabs .design-docs').addClass('current');
+      } else if (location.hash.search(/_all_docs/g) > -1) {
+        $('#topbar .tabs .all-docs').addClass('current');
+      } else if (location.hash.search(/_changes/g) > -1) {
+        $('#topbar .tabs .changes').addClass('current');
+      }
     }
   });
 
@@ -775,4 +793,4 @@ var futonApp = $.sammy(function () {
   this.get('#/:db/:docid', app.showDocument);
   
   this.get(/\#\/(.*)/, app.wildcard)
-})
+});
