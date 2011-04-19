@@ -72,7 +72,7 @@ specific language governing permissions and limitations under the License.
 
     $("button#replicate").click(function() {
       $("#records tbody.content").empty();
-      var targetIsLocal = $('#to_local')[0].checked;
+      var targetIsLocal = $('#to_local:checked').length > 0
       var source = $("#from_local")[0].checked ? $("#from_name").val() : $("#from_url").val();
       var target = targetIsLocal ? $("#to_name").val() : $("#to_url").val();
       var repOpts = {};
