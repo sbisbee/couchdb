@@ -60,7 +60,9 @@
               return;
             }
             $.couch.db(data.name).create({
-              error: function(status, id, reason) { callback({name: reason}) },
+              error: function(status, id, reason) {
+                callback({ name: reason })
+              },
               success: function(resp) {
                 location.href = "database.html?" + encodeURIComponent(data.name);
                 callback();
