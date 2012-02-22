@@ -50,8 +50,6 @@
     CouchIndexPage: function() {
       page = this;
 
-      $.futon.storage.declare("per_page", {defaultValue: 10});
-
       this.addDatabase = function() {
         $.showDialog("dialog/_create_database.html", {
           submit: function(data, callback) {
@@ -134,6 +132,19 @@
       var dbNameRegExp = new RegExp("[^a-z0-9\_\$\(\)\+\/\-]", "g");
       dbName = dbName.replace(dbNameRegExp, "");
 
+      /*
+       * Applies to every time browse/database.html is displayed, not just
+       * per-db-name. Ie., will be available for both browse/database.html?bwah
+       * and browse/database.html?foo
+       */
+      $.futon.storage.declareWithPrefix("dbView.", {
+        per_page: {
+          defaultValue: 10,
+          scope: "cookie"
+        }
+      });
+
+      //only applies to the current database (see comment above)
       $.futon.storage.declareWithPrefix(dbName + ".", {
         desc: {},
         language: {defaultValue: "javascript"},
@@ -141,7 +152,6 @@
         reduce_fun: {defaultValue: ""},
         reduce: {},
         group_level: {defaultValue: 100},
-        per_page: {defaultValue: 10},
         view: {defaultValue: ""},
         stale: {defaultValue: false}
       });
