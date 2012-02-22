@@ -65,7 +65,7 @@ run_command () {
     if test -n "$COUCHDB_OPTIONS"; then
         command="$command $COUCHDB_OPTIONS"
     fi
-    if test -n "$COUCHDB_USER"; then
+    if test -n "$COUCHDB_USER" -a "`id -u \"$COUCHDB_USER\" 2>&1`" != "`id -u`"; then
         if su $COUCHDB_USER -c "$command"; then
             return $SCRIPT_OK
         else
